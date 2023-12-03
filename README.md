@@ -69,7 +69,7 @@ The quickest and most customisable way to do this is via the CloudFormation cons
 1. For parameter "LambdaRole", enter the ARN noted from the output of the `sam deploy` command named `LambdaRole` (or alternatively, navigate to the Output of the cfn stack in CloudFormation console for the SAM app). Click "Next"
 1. In Step 3, leave "Service Managed Permissions" checked, and click "Next"
 1. In Step 4, leave deployment targets as "Deploy to Organization". This will deploy the role to all accounts in the Org. Alternatively, you can specify individual OUs instead of all the Org.
-1. Specify the regions, eg. ap-southeast-2 and ap-southeast-1
+1. Specify the region (Since a role is a global resource, indicate only one region to deploy per account)
 1. Optionally change the concurrent accounts and failure tolerance as desired.
 1. Click "Next", Review config, then "Submit"
 
