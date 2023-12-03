@@ -39,7 +39,7 @@
                 "iam:DeleteRole"
             ],
             "Resource": [
-                "arn:aws:iam::<AWS ACCOUNT ID>:role/sam-app-OrgDependencyCheckerFunctionRole*",
+                "arn:aws:iam::<AWS ACCOUNT ID>:role/<APPLICATION NAME>-OrgDependencyCheckerFunctionRole*",
                 "arn:aws:iam::<AWS ACCOUNT ID>:role/check-resource-policies-role"
             ]
         },
@@ -53,7 +53,7 @@
                 "lambda:InvokeFunction"
             ],
             "Resource": [
-                "arn:aws:lambda:*:<AWS ACCOUNT ID>:function:sam-app-OrgDependencyCheckerFunction*"
+                "arn:aws:lambda:*:<AWS ACCOUNT ID>:function:<APPLICATION NAME>-OrgDependencyCheckerFunction*"
             ]
         },
         {
@@ -64,7 +64,7 @@
             ],
             "Resource": [
                 "arn:aws:cloudformation:*:aws:transform/Serverless-2016-10-31",
-                "arn:aws:cloudformation:*:<AWS ACCOUNT ID>:stack/sam-app/*"
+                "arn:aws:cloudformation:*:<AWS ACCOUNT ID>:stack/<APPLICATION NAME>/*"
             ]
         },
         {
@@ -79,7 +79,7 @@
             ],
             "Resource": [
                 "arn:aws:cloudformation:*:<AWS ACCOUNT ID>:stack/aws-sam-cli-managed-default*",
-                "arn:aws:cloudformation:*:<AWS ACCOUNT ID>:stack/sam-app*"
+                "arn:aws:cloudformation:*:<AWS ACCOUNT ID>:stack/<APPLICATION NAME>*"
             ]
         },
         {
