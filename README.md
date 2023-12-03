@@ -104,3 +104,101 @@ The CSV / XLS files generated contain a column for `OrgPath Dependency Found` an
 If any row has this set to True, then a plan needs to be put in place for migration of this account. When removing from the existing Org these resources will be affected.
 
 Important to know: Please find the list of AWS Services that support resource based policies https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html#deploy_svcs 
+
+### Deploy role to Org accounts CLI
+
+First we must create the stack-set
+
+```bash
+aws cloudformation create-stack-set -\
+    -stack-set-name 'STACK_SET_NAME' \
+    --capabilities CAPABILITY_NAMED_IAM \
+    --permission-model SERVICE_MANAGED \
+    --template-body file://./org-dep-checker-role-stackset.yaml \
+    --auto-deployment Enabled=true,RetainStacksOnAccountRemoval=false \
+    --parameter ParameterKey='LambdaRole',ParameterValue='ARN VALUE'
+
+```
+
+Then you need to create the set of instances. **OrganizationalUnitIds** can be the Root ID so that all accounts in all OUs are updated, 
+or the OU ID so that only accounts in the organizational unit are updated
+
+```bash
+aws cloudformation create-stack-instances \
+  --stack-set-name 'STACK SET NAME' \
+  --deployment-targets OrganizationalUnitIds='ROOT ID for all accounts' \
+  --regions "REGION" \
+  --operation-preferences FailureToleranceCount=0,MaxConcurrentCount=1
+
+```
+
+### Command Line Utils
+
+Create user
+```bash
+aws iam create-user --path '/NEW/PATH/' --user-name 'USER NAME'
+
+```
+
+Create user credentials
+```bash
+aws iam create-access-key --user-name 'USER NAME'
+```
+
+Update IAM_Policy.json
+```bash
+export ACCOUNT_ID='...'
+export APPLICATION_NAME='...'
+sed -i "s/<AWS ACCOUNT ID>/$ACCOUNT_ID/g" IAM_Policy.json
+sed -i "s/<APPLICATION NAME>/$APPLICATION_NAME/g" IAM_Policy.json
+```
+
+Create policy
+```bash
+aws iam create-policy --path '/POLICY/PATH/' \
+    --policy-name 'POLICY NAME' \
+    --description 'DESCRIPTION' \
+    --policy-document "$(cat IAM_Policy.json)"
+```
+
+Create role
+```bash
+aws iam create-role \
+    --role-name 'ROLE NAME' \
+    --description 'DESCRIPTION' \
+    --path '/ROLE/PATH/' \
+    --assume-role-policy-document file://./Role-Trust-Policy.json 
+```
+
+Associate role and policy
+```bash
+aws iam attach-role-policy \
+    --role-name 'ROLE NAME' \
+    --policy-arn 'ARN'
+```
+
+Execute the lambda function
+```bash
+export AWS_PROFILE=...
+
+aws --region 'REGION' lambda invoke --function-name 'FUNCTION NAME'
+```
+
+### Configure the AWS CLI to use assume role
+
+~/.aws/credentials 
+```toml
+[NAME]
+aws_access_key_id     = ...
+aws_secret_access_key = ...
+```
+~/.aws/config
+```toml
+[profile NAME]
+region = us-east-1
+output = json
+
+[profile NAME-ROLE]
+role_arn = ARN 
+source_profile = NAME
+```
