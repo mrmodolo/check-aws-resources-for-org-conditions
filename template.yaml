@@ -33,7 +33,7 @@ Resources:
         Variables:
           USE_ORG_FOR_ACCOUNT_LIST: true  # Set this to True to scan all accounts in the Org. False means use ACCOUNT_LIST only
           ACCOUNT_LIST: 000000000000,111111111111
-          REGION_LIST: ap-southeast-2,ap-southeast-1
+          REGION_LIST: us-east-1,sa-east-1
 
   ReportBucket:
     Type: AWS::S3::Bucket
