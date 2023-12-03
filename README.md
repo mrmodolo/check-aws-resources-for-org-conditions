@@ -187,13 +187,13 @@ aws --region 'REGION' lambda invoke --function-name 'FUNCTION NAME'
 ### Configure the AWS CLI to use assume role
 
 ~/.aws/credentials 
-```toml
+```
 [NAME]
 aws_access_key_id     = ...
 aws_secret_access_key = ...
 ```
 ~/.aws/config
-```toml
+```
 [profile NAME]
 region = us-east-1
 output = json
