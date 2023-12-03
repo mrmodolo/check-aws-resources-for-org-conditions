@@ -14,7 +14,7 @@ Resources:
     Properties:
       CodeUri: src/
       Handler: dependencyChecker.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.10
       Timeout: 900 # 15 mins in case many accounts assessed at once.
       MemorySize: 1024
       Policies:
