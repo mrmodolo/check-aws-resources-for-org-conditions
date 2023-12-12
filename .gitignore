@@ -1,4 +1,5 @@
 .aws-sam/
 .vscode/
+.env
 samconfig.toml
 tmp/
