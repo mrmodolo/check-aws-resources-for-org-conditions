@@ -1,6 +1,7 @@
 .aws-sam/
 .vscode/
 venv/
+__pycache__/
 .env
 samconfig.toml
 tmp/
