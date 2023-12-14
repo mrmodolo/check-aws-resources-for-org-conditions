@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 ######################################
 # Create AWS service client objects
 ######################################
-SESSION = boto3.Session()
+SESSION = boto3.session.Session()
 ORG_CLIENT = SESSION.client('organizations')
 STS_CLIENT = SESSION.client('sts')
 S3_CLIENT = SESSION.client('s3')
@@ -469,21 +469,19 @@ def XlsReportWriter(ReportObj):
 
         # Rename the primary worksheet, and then create additional worksheets.
         WS = WB.active
-        if WS is not None and type(WS) is dict:
-            WS.title = "Metrics"
-            WS['A1'] = "Service"
-            WS['B1'] = "Total Resources Scanned"
-            WS['C1'] = "Total Dependencies Found"
+        WS.title = "Metrics"
+        WS['A1'] = "Service"
+        WS['B1'] = "Total Resources Scanned"
+        WS['C1'] = "Total Dependencies Found"
 
         # Create a tab for each of the services queried
         for cell, service in enumerate(ENABLED_REPORTS, start=2):
             # Search the Report Object for data for the service
             Data = ReportObj.get(service)
             # Write the totals to the metrics worksheet
-            if type(WS) is dict:
-                WS[f"A{cell}"] = service
-                WS[f"B{cell}"] = len(Data)
-                WS[f"C{cell}"] = CountDeps(Data)
+            WS[f"A{cell}"] = service
+            WS[f"B{cell}"] = len(Data)
+            WS[f"C{cell}"] = CountDeps(Data)
             # print(Data)
             # print(cell)
 
@@ -2762,7 +2760,7 @@ def lambda_handler(event, context):
             AccountTokens = AccountCredentials.get('Credentials')
 
             # Build a new account session to pass to the collectors
-            AccountSession = boto3.Session(
+            AccountSession = boto3.session.Session(
                 aws_access_key_id=AccountTokens.get('AccessKeyId'),
                 aws_secret_access_key=AccountTokens.get('SecretAccessKey'),
                 aws_session_token=AccountTokens.get('SessionToken')
@@ -3217,4 +3215,3 @@ def lambda_handler(event, context):
     # Write the collected data to a CSV/Excel file
     CSVReportWriter(ResourceList)
     XlsReportWriter(XLSReportObj)
-

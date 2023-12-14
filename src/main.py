@@ -1,8 +1,6 @@
-import logging
 import os
 import logging
 from dotenv import load_dotenv
-
 
 logging.basicConfig(
     level=logging.INFO,
@@ -24,15 +22,13 @@ AWS_EB_PROFILE = os.getenv('AWS_EB_PROFILE') # profile que irá assumir a role
 AWS_PROFILE = os.getenv('AWS_PROFILE') # profile que irá assumir a role
 AWS_REGION = os.getenv('AWS_REGION')
 USE_ORG_FOR_ACCOUNT_LIST = os.getenv('USE_ORG_FOR_ACCOUNT_LIST') # Valos listar todas as cotontas na organização
+ACCOUNT_LIST = os.getenv('ACCOUNT_LIST') # List off accounts if USE_ORG_FOR_ACCOUNT_LIST is false
 
 
 def main():
-    from dependencyChecker import lambda_handler
+    import dependencyChecker
     # Esse é o entrypoint da função lambda os parâmetros não são usados
     # na função
-    event = None
-    context = None
-    lambda_handler(event, context)
-
+    dependencyChecker.lambda_handler(None, None)
 
 main()
