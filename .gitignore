@@ -5,3 +5,4 @@ __pycache__/
 .env
 samconfig.toml
 tmp/
+.python-version
